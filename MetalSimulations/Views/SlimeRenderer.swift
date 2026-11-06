@@ -54,7 +54,7 @@ final class SlimeRenderer: NSObject, MTKViewDelegate {
         
         self.quadVertexBuffer = device.makeBuffer(bytes: Vertex.quadVertices, length: MemoryLayout<Vertex>.stride * Vertex.quadVertices.count, options: [])!
         
-        self.agentBuffer = Agent.makeAgents(count: numberOfAgents, device: self.device)
+        self.agentBuffer = makeAgents(count: numberOfAgents, device: self.device)
         
         do {
             let computePipelineDescriptor = MTLComputePipelineDescriptor()

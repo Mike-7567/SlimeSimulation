@@ -7,18 +7,10 @@
 
 #include <metal_stdlib>
 using namespace metal;
-#include "../Util.h"
+#include "Util.h"
+#include "../Util/Shared.h"
 
-struct Agent {
-    float3 position;
-    float angle;
-};
 
-struct Settings {
-    float wanderStrength;
-    float speed;
-    float rotationAngle;
-};
 
 kernel void updateAgents(uint index [[thread_position_in_grid]], texture2d<float, access::sample> inTexture [[texture(0)]], texture2d<float, access::write> outTexture [[texture(1)]], device Agent *agents [[buffer(0)]], constant Settings &settings [[buffer(1)]], constant uint &screenScale [[buffer(2)]]) {
     float sizeOfScreen = screenScale;

@@ -7,7 +7,7 @@
 
 #include <metal_stdlib>
 using namespace metal;
-#include "../Util.h"
+#include "Util.h"
 
 constexpr sampler samp = sampler(coord::normalized, filter::linear);
 
