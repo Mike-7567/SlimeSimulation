@@ -10,9 +10,9 @@ using namespace metal;
 #include "Util.h"
 #include "../Util/Shared.h"
 
+//constexpr sampler samp = sampler(coord::pixel, filter::linear, address::clamp_to_zero);
 
-
-kernel void updateAgents(uint index [[thread_position_in_grid]], texture2d<float, access::sample> inTexture [[texture(0)]], texture2d<float, access::write> outTexture [[texture(1)]], device Agent *agents [[buffer(0)]], constant Settings &settings [[buffer(1)]], constant uint &screenScale [[buffer(2)]]) {
+kernel void updateAgents(uint index [[thread_position_in_grid]], texture2d<float, access::sample> inTexture [[texture(0)]], texture2d<float, access::write> outTexture [[texture(1)]], device Agent *agents [[buffer(0)]], constant SettingsStruct &settings [[buffer(1)]], constant uint &screenScale [[buffer(2)]]) {
     float sizeOfScreen = screenScale;
     float speed = 1.25;
     float rotationAngle = 1.25;
@@ -22,7 +22,7 @@ kernel void updateAgents(uint index [[thread_position_in_grid]], texture2d<float
     rotationAngle = settings.rotationAngle;
     wanderStrength = settings.wanderStrength;
     
-    float3 senceResult = sence(agents[index].angle, rotationAngle, speed, agents[index].position.xy, inTexture);
+    float3 senceResult = sence(agents[index].angle, rotationAngle, speed, agents[index].position.xy, inTexture, agents[index].speciesMask);
     float wanderValue = (normalizedHash(agents[index].position.x - index * agents[index].position.y) * 2 - 1) * wanderStrength;
     
     if (senceResult.y > senceResult.x && senceResult.y > senceResult.z) {
@@ -58,13 +58,12 @@ kernel void updateAgents(uint index [[thread_position_in_grid]], texture2d<float
         agents[index].angle += 3;
     }
     
-    
-    
-    
     int x = int(agents[index].position.x);
     int y = int(agents[index].position.y);
     
-    outTexture.write(float4(1., 1., 1., 1.), uint2(x, y));
+    //float4 color = inTexture.sample(samp, agents[index].position.xy);
+    
+    outTexture.write(agents[index].speciesMask, uint2(x, y));
 }
 
 

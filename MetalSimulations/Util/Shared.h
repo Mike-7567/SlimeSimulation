@@ -13,9 +13,10 @@
 struct Agent {
     simd_float3 position;
     float angle;
+    simd_float4 speciesMask;
 };
 
-struct Settings {
+struct SettingsStruct {
     float wanderStrength;
     float speed;
     float rotationAngle;

@@ -25,16 +25,32 @@ float normalizedHash(uint i) {
     return hash(i) / 4294967295.0;
 }
 
-float3 sence(float angle, float sensorAngleOffset, float sensorDistance, float2 position, texture2d<float, access::sample> map) {
+float3 sence(float angle, float sensorAngleOffset, float sensorDistance, float2 position, texture2d<float, access::sample> map, float4 speciesMask) {
     
-    float leftArea = 0;
-    leftArea += map.sample(samp, float2(position.x + cos(angle + sensorAngleOffset) * sensorDistance, position.y + sin(angle + sensorAngleOffset) * sensorDistance)).r;
+    float4 inverseMask = (speciesMask - 1.0) * -1.0;
     
-    float forwardArea = 0;
-    forwardArea += map.sample(samp, float2(position.x + cos(angle) * sensorDistance, position.y + sin(angle) * sensorDistance)).r;
+    float4 leftSample = map.sample(samp, float2(position.x + cos(angle + sensorAngleOffset) * sensorDistance, position.y + sin(angle + sensorAngleOffset) * sensorDistance));
     
-    float rightArea = 0;
-    rightArea += map.sample(samp, float2(position.x + cos(angle - sensorAngleOffset) * sensorDistance, position.y + sin(angle - sensorAngleOffset) * sensorDistance)).r;
+    float4 leftAttraction = leftSample * speciesMask;
+    float4 leftAversion = leftSample * inverseMask;
+    
+    float leftArea = leftAttraction.x + leftAttraction.y + leftAttraction.z + leftAttraction.w - leftAversion.x - leftAversion.y - leftAversion.z - leftAversion.w;
+    
+    
+    float4 forwardSample = map.sample(samp, float2(position.x + cos(angle) * sensorDistance, position.y + sin(angle) * sensorDistance));
+    
+    float4 forwardAttraction = forwardSample * speciesMask;
+    float4 forwardAversion = forwardSample * inverseMask;
+    
+    float forwardArea = forwardAttraction.x + forwardAttraction.y + forwardAttraction.z + forwardAttraction.w - forwardAversion.x - forwardAversion.y - forwardAversion.z - forwardAversion.w;
+    
+    
+    float4 rightSample = map.sample(samp, float2(position.x + cos(angle - sensorAngleOffset) * sensorDistance, position.y + sin(angle - sensorAngleOffset) * sensorDistance));
+    
+    float4 rightAttraction = rightSample * speciesMask;
+    float4 rightAversion = rightSample * inverseMask;
+    
+    float rightArea = rightAttraction.x + rightAttraction.y + rightAttraction.z + rightAttraction.w - rightAversion.x - rightAversion.y - rightAversion.z - rightAversion.w;
     
     return float3(leftArea, forwardArea, rightArea);
 }

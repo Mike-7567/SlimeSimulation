@@ -9,7 +9,7 @@ import MetalKit
 
 @MainActor
 final class SlimeRenderer: NSObject, MTKViewDelegate {
-    let numberOfAgents = 100000;
+    let numberOfAgents = 1000000;
     
     let device: MTLDevice
     let commandQueue: MTLCommandQueue
@@ -19,7 +19,7 @@ final class SlimeRenderer: NSObject, MTKViewDelegate {
     let firstComputePipelineState: MTLComputePipelineState
     let secondComputePipelineState: MTLComputePipelineState
     
-    var settings = Settings(wanderStrength: 0, speed: 0, rotationAngle: 0)
+    var settings = SettingsStruct(wanderStrength: 0, speed: 0, rotationAngle: 0)
     
     override init() {
         guard let device = MTLCreateSystemDefaultDevice() else {
@@ -83,8 +83,8 @@ final class SlimeRenderer: NSObject, MTKViewDelegate {
         
     }
     
-    func updateSettings(wanderStrength: Float, speed: Float, rotationAngle: Float) {
-        self.settings = Settings(wanderStrength: wanderStrength, speed: speed, rotationAngle: rotationAngle)
+    func updateSettings(_ settings: SettingsStruct) {
+        self.settings = settings
     }
     
     func draw(in view: MTKView) {
@@ -109,7 +109,7 @@ final class SlimeRenderer: NSObject, MTKViewDelegate {
             firstComputeCommandEncoder.label = "Agent Compute Encoder"
             firstComputeCommandEncoder.setComputePipelineState(firstComputePipelineState)
             firstComputeCommandEncoder.setBuffer(agentBuffer, offset: 0, index: 0)
-            firstComputeCommandEncoder.setBytes(&settings, length: MemoryLayout<Settings>.stride, index: 1)
+            firstComputeCommandEncoder.setBytes(&settings, length: MemoryLayout<SettingsStruct>.stride, index: 1)
             var a = simd_int1(Preferences.sizeOfScreen)
             
             firstComputeCommandEncoder.setBytes(&a, length: MemoryLayout<simd_int1>.stride, index: 2)

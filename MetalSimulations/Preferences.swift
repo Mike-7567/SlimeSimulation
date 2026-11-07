@@ -10,7 +10,7 @@ import Metal
 
 @MainActor
 class Preferences {
-    static let sizeOfScreen = 180
+    static let sizeOfScreen = 80
     
     static let mainColorFormat: MTLPixelFormat = .bgra8Unorm
     

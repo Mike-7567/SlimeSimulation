@@ -17,6 +17,15 @@ extension simd_float4 {
     static let white = simd_float4(1, 1, 1, 1)
 }
 
+extension simd_int4 {
+    static let black = simd_int4(0, 0, 0, 0)
+    static let red = simd_int4(1, 0, 0, 1)
+    static let green = simd_int4(0, 1, 0, 1)
+    static let blue = simd_int4(0, 0, 1, 1)
+    static let yellow = simd_int4(1, 1, 0, 1)
+    static let white = simd_int4(1, 1, 1, 1)
+}
+
 extension CGFloat {
     static let one = CGFloat(1)
     

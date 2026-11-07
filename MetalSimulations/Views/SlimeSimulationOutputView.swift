@@ -11,9 +11,7 @@ import MetalKit
 struct SlimeSimulationOutputView: NSViewRepresentable {
     @State var renderer = SlimeRenderer()
     
-    @Binding var wanderStrength: Float
-    @Binding var speed: Float
-    @Binding var rotationAngle: Float
+    @Binding var settings: SettingsStruct
     
     func makeNSView(context: Context) -> MTKView {
         let view = MTKView()
@@ -28,7 +26,7 @@ struct SlimeSimulationOutputView: NSViewRepresentable {
     }
     
     func updateNSView(_ nsView: MTKView, context: Context) {
-        renderer.updateSettings(wanderStrength: wanderStrength, speed: speed, rotationAngle: rotationAngle)
+        renderer.updateSettings(settings);
     }
     
     

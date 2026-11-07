@@ -12,7 +12,7 @@ uint hash(uint i);
 
 float normalizedHash(uint i);
 
-float3 sence(float angle, float sensorAngleOffset, float sensorDistance, float2 position, texture2d<float, access::sample>);
+float3 sence(float angle, float sensorAngleOffset, float sensorDistance, float2 position, texture2d<float, access::sample>, float4);
 
 float3 palette(float t);
 
